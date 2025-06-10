@@ -1,0 +1,101 @@
+### Build output ###
+/target/
+/build/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+### STS/Eclipse ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+out/
+
+### VS Code ###
+.vscode/
+.code-workspace
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### Java ###
+# Compiled class file
+*.class
+
+# Log files
+*.log
+log/
+logs/
+*.log.*
+
+### Spring Boot ###
+**/application-local.properties
+**/application-local.yml
+**/application-dev.properties
+**/application-dev.yml
+**/application-prod.properties
+**/application-prod.yml
+**/src/main/resources/application-local.properties
+**/src/main/resources/application-local.yml
+
+### Database ###
+*.db
+*.sqlite
+
+### OS generated files ###
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+### Maven ###
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+### Node (if frontend work included) ###
+/node_modules/
+/npm-debug.log
+/yarn-error.log
+/.pnpm-debug.log
+/package-lock.json
+/yarn.lock
+/.env
+
+### Miscellaneous ###
+*.swp
+*.swo
+*~
+.gradle
+local.properties
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+hs_err_pid
