@@ -52,8 +52,6 @@ public class User implements UserDetails {
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastLogin;
     
-    private boolean active = true;
-    
     private boolean accountNonExpired = true;
     private boolean accountNonLocked = true;
     private boolean credentialsNonExpired = true;
@@ -72,7 +70,7 @@ public class User implements UserDetails {
         this.email = email;
         this.role = role;
         this.createdAt = new Date();
-        this.active = true;
+        this.enabled = true;
     }
     
     // UserDetails implementation methods
@@ -95,10 +93,5 @@ public class User implements UserDetails {
     @Override
     public boolean isCredentialsNonExpired() {
         return credentialsNonExpired;
-    }
-    
-    @Override
-    public boolean isEnabled() {
-        return enabled;
     }
 }

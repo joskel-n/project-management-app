@@ -101,9 +101,17 @@ spring-boot-starter-validation
 
 </artifactId>
 </dependency>
-    <!-- Security dependency removed (will be added back later with proper configuration) -->
-    
-    <!-- Development Tools -->
+   <!-- Spring Security -->
+<dependency>
+<groupId>
+org.springframework.boot
+
+</groupId>
+<artifactId>
+spring-boot-starter-security
+
+</artifactId>
+</dependency>
 <dependency>
 <groupId>
 org.springframework.boot
@@ -152,7 +160,21 @@ test
 
 </scope>
 </dependency>
-    <!-- Security test dependency also removed -->
+<!-- Spring Security Test (for testing security features) -->
+<dependency>
+<groupId>
+org.springframework.security
+
+</groupId>
+<artifactId>
+spring-security-test
+
+</artifactId>
+<scope>
+test
+
+</scope>
+</dependency>
 </dependencies>
 <build>
 <plugins>
