@@ -1,5 +1,8 @@
 package com.projectmanagement.controller;
 
+import com.projectmanagement.model.User;
+import com.projectmanagement.model.User.UserRole;
+import com.projectmanagement.repository.UserRepository;
 import com.projectmanagement.security.JwtTokenUtil;
 import com.projectmanagement.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +14,7 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,6 +37,13 @@ public class AuthenticationController {
 
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
+
+
+    @Autowired
+    private UserRepository userRepository;
+    
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @PostMapping("/login")
     public ResponseEntity<?> createAuthenticationToken(@Valid @RequestBody AuthenticationRequest authenticationRequest) {
@@ -71,5 +82,41 @@ public class AuthenticationController {
             error.put("error", "Authentication failed: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
         }
+    }
+
+        @PostMapping("/register")
+    public ResponseEntity<?> registerUser(@Valid @RequestBody RegistrationRequest registrationRequest) {
+        Map<String, String> response = new HashMap<>();
+        
+        // Check if username already exists
+        if (userRepository.existsByUsername(registrationRequest.getUsername())) {
+            response.put("error", "Username is already taken");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+        
+        // Check if email already exists
+        if (userRepository.existsByEmail(registrationRequest.getEmail())) {
+            response.put("error", "Email is already in use");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+        
+        // Create new user with EMPLOYEE role
+        User user = new User(
+            registrationRequest.getUsername(),
+            passwordEncoder.encode(registrationRequest.getPassword()), // Encode password
+            registrationRequest.getFullName(),
+            registrationRequest.getEmail(),
+            UserRole.EMPLOYEE // All registrations default to EMPLOYEE role
+        );
+        
+        // Save user to database
+        userRepository.save(user);
+        
+        // Return success response
+        response.put("message", "User registered successfully");
+        response.put("username", user.getUsername());
+        response.put("role", user.getRole().toString());
+        
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 }
