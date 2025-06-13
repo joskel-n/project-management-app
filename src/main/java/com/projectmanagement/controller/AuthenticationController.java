@@ -1,5 +1,8 @@
 package com.projectmanagement.controller;
 
+import com.projectmanagement.dto.AuthenticationRequest;
+import com.projectmanagement.dto.AuthenticationResponse;
+import com.projectmanagement.dto.RegistrationRequest;
 import com.projectmanagement.model.User;
 import com.projectmanagement.model.User.UserRole;
 import com.projectmanagement.repository.UserRepository;

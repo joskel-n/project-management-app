@@ -1,4 +1,4 @@
-package com.projectmanagement.controller;
+package com.projectmanagement.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

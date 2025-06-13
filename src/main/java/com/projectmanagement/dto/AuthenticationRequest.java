@@ -1,4 +1,4 @@
-package com.projectmanagement.controller;
+package com.projectmanagement.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
