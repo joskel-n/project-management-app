@@ -3,7 +3,7 @@ package com.projectmanagement.service;
 import com.projectmanagement.dto.ProjectCreationRequest;
 import com.projectmanagement.model.Project;
 import com.projectmanagement.model.User;
-import com.projectmanagement.model.UserRole;
+import com.projectmanagement.model.User.UserRole;
 import com.projectmanagement.repository.ProjectRepository;
 import com.projectmanagement.exception.AccessDeniedException;
 
