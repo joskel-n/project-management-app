@@ -1,39 +1,42 @@
 package com.projectmanagement.model;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.time.LocalDate;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+
 @Entity
-@Table(name = "projects")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Project {
-
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @NotBlank(message = "Project name is required")
-    @Size(min = 2, max = 100, message = "Name must be between 2 and 100 characters")
+    
+    @NotBlank
+    @Size(min = 3, max = 100)
     private String name;
-
-    @NotNull(message = "Start date is required")
+    
+    @NotNull
     private LocalDate startDate;
-
+    
     private LocalDate endDate;
-
-    @Column(columnDefinition = "TEXT")
+    
+    @Size(max = 500)
     private String description;
     
-    @Column(name = "created_at", updatable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "created_by_user_id")
+    private User createdBy;
+    
     private LocalDate createdAt;
     
     @PrePersist
