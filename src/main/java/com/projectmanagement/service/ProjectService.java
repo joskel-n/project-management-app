@@ -1,26 +1,31 @@
 package com.projectmanagement.service;
 
 import com.projectmanagement.dto.ProjectCreationRequest;
+import com.projectmanagement.dto.ProjectClientAssociationRequest;
 import com.projectmanagement.model.Project;
+import com.projectmanagement.model.Client;
 import com.projectmanagement.model.User;
-import com.projectmanagement.model.User.UserRole;
+import com.projectmanagement.model.UserRole;
 import com.projectmanagement.repository.ProjectRepository;
+import com.projectmanagement.repository.ClientRepository;
 import com.projectmanagement.exception.AccessDeniedException;
+import com.projectmanagement.exception.ResourceNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ProjectService {
 
     @Autowired
     private ProjectRepository projectRepository;
+    
+    @Autowired
+    private ClientRepository clientRepository;
+
     
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PROJECT_MANAGER')")
     public Project createProject(ProjectCreationRequest projectRequest) {
@@ -44,5 +49,29 @@ public class ProjectService {
         return projectRepository.save(newProject);
     }
     
+    @Transactional
+    public Project associateProjectWithClient(Long projectId, Long clientId) {
+        // Get the current authenticated user
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User currentUser = (User) authentication.getPrincipal();
+        
+        // Validate that user has appropriate role
+        if (currentUser.getRole() != UserRole.ADMIN && currentUser.getRole() != UserRole.PROJECT_MANAGER) {
+            throw new AccessDeniedException("Only administrators and project managers can associate projects with clients");
+        }
+        
+        // Find the project
+        Project project = projectRepository.findById(projectId)
+            .orElseThrow(() -> new ResourceNotFoundException("Project not found with id: " + projectId));
+        
+        // Find the client
+        Client client = clientRepository.findById(clientId)
+            .orElseThrow(() -> new ResourceNotFoundException("Client not found with id: " + clientId));
+        
+        // Associate the project with the client
+        project.setClient(client);
+        
+        return projectRepository.save(project);
+    }
     // Other existing service methods...
 }

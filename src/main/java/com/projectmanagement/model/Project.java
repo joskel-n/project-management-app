@@ -37,6 +37,10 @@ public class Project {
     @JoinColumn(name = "created_by_user_id")
     private User createdBy;
     
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "client_id")
+    private Client client;
+    
     private LocalDate createdAt;
     
     @PrePersist
