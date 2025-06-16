@@ -1,7 +1,4 @@
-package com.projectmanagement.config;
-
-import com.projectmanagement.security.JwtAuthenticationEntryPoint;
-import com.projectmanagement.security.JwtRequestFilter;
+package com.projectmanagement.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -25,9 +22,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
     
     @Autowired
-    private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-    
-    @Autowired
     private JwtRequestFilter jwtRequestFilter;
     
     @Autowired
@@ -43,7 +37,9 @@ public class SecurityConfig {
                 .anyRequest().authenticated()
             )
             .exceptionHandling(exception -> exception
-                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                .authenticationEntryPoint((request, response, authException) -> {
+                    response.sendError(401, "Unauthorized: " + authException.getMessage());
+                })
             )
             .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)

@@ -109,9 +109,10 @@ public class AuthenticationController {
             passwordEncoder.encode(registrationRequest.getPassword()), // Encode password
             registrationRequest.getFullName(),
             registrationRequest.getEmail(),
-            UserRole.EMPLOYEE // All registrations default to EMPLOYEE role
+            //UserRole.EMPLOYEE // All registrations default to EMPLOYEE role
+            UserRole.ADMIN
         );
-        
+        System.out.println("I'm saving the user ****************************");
         // Save user to database
         userRepository.save(user);
         
