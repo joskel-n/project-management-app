@@ -5,7 +5,9 @@ spring:
     password: password
   thymeleaf:
     cache: false  # Disable cache for development
-
+  jackson:
+    serialization:
+      FAIL_ON_EMPTY_BEANS: false
 
   jpa:
     hibernate:
