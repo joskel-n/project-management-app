@@ -87,19 +87,9 @@ if (currentUser.getRole() != User.UserRole.ADMIN && currentUser.getRole() != Use
         return projectRepository.save(project);
     }
 
-
     @Transactional
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PROJECT_MANAGER')")
     public Project addTeamsToProject(Long projectId, ProjectTeamAssociationRequest request) {
-        // Get the current authenticated user
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User currentUser = (User) authentication.getPrincipal();
-        
-        // Validate that user has appropriate role
-        if (currentUser.getRole() != User.UserRole.ADMIN && currentUser.getRole() != User.UserRole.PROJECT_MANAGER) {
-            throw new AccessDeniedException("Only administrators and project managers can add teams to projects");
-        }
-        
         // Find the project
         Project project = projectRepository.findById(projectId)
             .orElseThrow(() -> new ResourceNotFoundException("Project not found with id: " + projectId));
@@ -121,15 +111,6 @@ if (currentUser.getRole() != User.UserRole.ADMIN && currentUser.getRole() != Use
     @Transactional
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PROJECT_MANAGER')")
     public Project removeTeamFromProject(Long projectId, Long teamId) {
-        // Get the current authenticated user
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User currentUser = (User) authentication.getPrincipal();
-        
-        // Validate that user has appropriate role
-        if (currentUser.getRole() != User.UserRole.ADMIN && currentUser.getRole() != User.UserRole.PROJECT_MANAGER) {
-            throw new AccessDeniedException("Only administrators and project managers can remove teams from projects");
-        }
-        
         // Find the project
         Project project = projectRepository.findById(projectId)
             .orElseThrow(() -> new ResourceNotFoundException("Project not found with id: " + projectId));
@@ -156,5 +137,6 @@ if (currentUser.getRole() != User.UserRole.ADMIN && currentUser.getRole() != Use
         
         return project.getTeams();
     }
-    // Other existing service methods...
+
+     // Other existing service methods...
 }
