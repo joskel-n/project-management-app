@@ -6,6 +6,7 @@ spring:
   thymeleaf:
     cache: false  # Disable cache for development
 
+
   jpa:
     hibernate:
       ddl-auto: update

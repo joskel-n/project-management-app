@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -35,12 +36,15 @@ public class Project {
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by_user_id")
+    
     private User createdBy;
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "client_id")
+    
     private Client client;
     
+   
     private LocalDate createdAt;
     
     @PrePersist

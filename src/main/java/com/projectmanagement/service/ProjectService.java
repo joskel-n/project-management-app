@@ -5,15 +5,17 @@ import com.projectmanagement.dto.ProjectClientAssociationRequest;
 import com.projectmanagement.model.Project;
 import com.projectmanagement.model.Client;
 import com.projectmanagement.model.User;
-import com.projectmanagement.model.UserRole;
+import com.projectmanagement.model.User.UserRole;  // Corrected: import as inner enum of User class
 import com.projectmanagement.repository.ProjectRepository;
 import com.projectmanagement.repository.ClientRepository;
 import com.projectmanagement.exception.AccessDeniedException;
 import com.projectmanagement.exception.ResourceNotFoundException;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.security.access.prepost.PreAuthorize;  // Added missing import
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -56,9 +58,9 @@ public class ProjectService {
         User currentUser = (User) authentication.getPrincipal();
         
         // Validate that user has appropriate role
-        if (currentUser.getRole() != UserRole.ADMIN && currentUser.getRole() != UserRole.PROJECT_MANAGER) {
-            throw new AccessDeniedException("Only administrators and project managers can associate projects with clients");
-        }
+if (currentUser.getRole() != User.UserRole.ADMIN && currentUser.getRole() != User.UserRole.PROJECT_MANAGER) {
+    throw new AccessDeniedException("Only administrators and project managers can associate projects with clients");
+}
         
         // Find the project
         Project project = projectRepository.findById(projectId)
@@ -69,6 +71,7 @@ public class ProjectService {
             .orElseThrow(() -> new ResourceNotFoundException("Client not found with id: " + clientId));
         
         // Associate the project with the client
+        Hibernate.initialize(client);
         project.setClient(client);
         
         return projectRepository.save(project);
